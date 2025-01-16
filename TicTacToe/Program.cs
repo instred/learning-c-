@@ -4,58 +4,17 @@ namespace TicTacToe
 {
     public class Program
     {
-        public const int board_x = 13;
-        public const int board_y = 7;
         
 
-        public static string[,] InitializeBoard()
-        {
-            string[,] board = new string[board_y,board_x];
-            string boundary = "*";
-
-            for (int i=0; i < board_y; i++)
-            {
-
-                for (int j=0; j<board_x; j++)
-                {
-
-                    if (i % 2 == 0 || j % 4 == 0)
-                    {
-                        board[i, j] = boundary;
-                    }
-                    else 
-                    {
-                        board[i, j] = " ";
-                    }
-                }
-            }
-            return board;
-            
-        }
-
-        public static void DrawBoard(string[,] board)
-        {
-
-            for (int i=0; i< board_y; i++)
-            {
-                for (int j=0; j < board_x; j++)
-
-                {
-                    Console.Write(board[i,j]);
-                }
-
-                Console.WriteLine();
-            }
-        }
-
-        public static bool CheckWinner(string[,] board, string ch_checked)
+        public static bool CheckWinner(string[,] board, int x, int y, string ch_checked)
         {
             // [1,2] [1,6] [1,10]
             // [3,2] [3,6] [3,10]
             // [5,2] [5,6] [5,10]
 
+
             // horizontal lines
-            for (int i=1; i<board_y; i+=2)
+            for (int i=1; i < y; i+=2)
             {
                 if (board[i, 2] == ch_checked && board[i, 6] == ch_checked && board[i, 10] == ch_checked)
                 {
@@ -65,7 +24,7 @@ namespace TicTacToe
 
             // vertical lines
 
-            for (int i=2; i<board_x; i+=4)
+            for (int i=2; i< x; i+=4)
             {
                 if (board[1, i] == ch_checked && board[3, i] == ch_checked && board[5, i] == ch_checked)
                 {
@@ -85,96 +44,144 @@ namespace TicTacToe
         }
 
 
-        public static void MakeMove(string[,] board, int position, string ch_moving)
+        public static void MakeMove(string[,] current_board, int position, string ch_moving)
         {
+            
             switch(position)
             {
                 case 1:
-                    board[1,2] = ch_moving;
+                    current_board[1,2] = ch_moving;
                     break;
                 case 2:
-                    board[1,6] = ch_moving;
+                    current_board[1,6] = ch_moving;
                     break;
                 case 3:
-                    board[1,10] = ch_moving;
+                    current_board[1,10] = ch_moving;
                     break;
                 case 4:
-                    board[3,2] = ch_moving;
+                    current_board[3,2] = ch_moving;
                     break;
                 case 5:
-                    board[3,6] = ch_moving;
+                    current_board[3,6] = ch_moving;
                     break;
                 case 6:
-                    board[3,10] = ch_moving;
+                    current_board[3,10] = ch_moving;
                     break;
                 case 7:
-                    board[5,2] = ch_moving;
+                    current_board[5,2] = ch_moving;
                     break;
                 case 8:
-                    board[5,6] = ch_moving;
+                    current_board[5,6] = ch_moving;
                     break;
                 case 9:
-                    board[5,10] = ch_moving;
+                    current_board[5,10] = ch_moving;
                     break;
             }
         }
 
-        public static void AddMoveCaptions()
+        public static void AddMoveCaptions(int[] available_moves)
         {
-            Console.WriteLine("[1] - left top\n[2] - mid top\n[3] - right top\n[4] - left middle\n[5] - mid middle\n[6] - right middle\n[7] - left bot\n[8] - mid bot\n[9] - right bot\n");
+            Console.WriteLine("Available Moves:\n");
+            for (int i=0; i < 9; i++)
+            {
+                if(available_moves[i] == 0)
+                {
+                    Console.Write($" [{i+1}] ");
+                }
+                else
+                {
+                    Console.Write($" [-] ");
+                }
+                if ((i+1) % 3 == 0)
+                {
+                    Console.WriteLine("\n");
+                }
+            }
         }
 
-        public static void GameLoop(string[,] board)
+        public static void GameLoop(Board board_obj)
         {
 
             string current_player = "X";
             int moves_count = 0;
+            int[] available_moves = new int[9];
+            int player = 1;
+            string[,] current_board = board_obj.board;
+            int x = board_obj.BoardX;
+            int y = board_obj.BoardY;
+            
+            Array.Fill(available_moves, 0);
+            
 
-            DrawBoard(board);
+            board_obj.DrawBoard();
 
-            while (!CheckWinner(board, current_player) && moves_count < 16)
+            while (!CheckWinner(current_board, x, y, current_player) && moves_count < 9)
             {
+                
                 if (moves_count % 2 == 1)
                 {
                     current_player = "O";
+                    player = 2;
                 }
                 else
                 {
                     current_player = "X";
+                    player = 1;
                 }
+                Console.WriteLine($"Player {player} to move. Select the position for {current_player}");
 
-                AddMoveCaptions();
+                AddMoveCaptions(available_moves); 
                 string move = Console.ReadLine() ?? String.Empty;
                 int movenum;
 
-                while (!Int32.TryParse(move, out movenum))
+                while (!Int32.TryParse(move, out movenum) || movenum < 1 || movenum > 15 || available_moves[movenum-1] == -1)
                 {
-                    Console.WriteLine();
+                    Console.Clear();
+                    board_obj.DrawBoard();
+                    Console.WriteLine("The place you picked is not available or the input is wrong :(");
+                    AddMoveCaptions(available_moves); 
                     move = Console.ReadLine() ?? String.Empty;
                 }
 
-                MakeMove(board, movenum, current_player);
-                DrawBoard(board);
 
+                MakeMove(current_board, movenum, current_player);
+                available_moves[movenum-1] = -1;
+                Console.Clear();
+                board_obj.DrawBoard();
+
+                Console.WriteLine(moves_count);
                 moves_count++;
                 
-                // Console.WriteLine(moves_count);
 
+            }
+
+            if (moves_count == 9)
+            {
+                Console.WriteLine("Unfortunately there was no winner :(");
+                Console.WriteLine("Would you like to play another game? (y/n)");
+            }
+            else if (CheckWinner(current_board, x, y, current_player))
+            {
+                Console.WriteLine($"Player {player} won!");
+                Console.WriteLine("Would you like to play another game? (y/n)");
             }
             
         }
 
         public static void Main(string[] args)
         {
-            Console.WriteLine("Welcome to a Tic Tac Toe game!\nThis is a game for two, so you need to bring some friend with you.\nPlayer 1 will start and have 'X' symbol. To start, pick a position to add 'X':");
-            string[,] board = InitializeBoard();
-            GameLoop(board);
+            Board board_obj = new();
+            do 
+            {
+                Console.Clear();
+                Console.WriteLine("Welcome to a Tic Tac Toe game!\nThis is a game for two, so you need to bring some friend with you.\nPlayer 1 will start and have 'X' symbol. To start, press any button.");
+                Console.ReadKey();
+                Console.Clear();
+                GameLoop(board_obj);
+            }
+            while (Console.ReadLine()=="y");
+
             
         }
     }
 }
-
-
-// Remove from the list those fields that are present on the board - as from the console writes
-// Add so the player cannot override field that is already marked
-// Add some caption for congrats for winning player + caption for game with no winner
