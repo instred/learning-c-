@@ -1,8 +1,4 @@
-﻿using System;
-using System.Net.Http;
-
-
-
+﻿
 namespace WeatherForecast
 {
     
@@ -19,15 +15,28 @@ namespace WeatherForecast
             };
 
             client = new HttpClient();
+            
 
         }
 
         public async Task<string> GetAsync(string uri)
         {
-            using HttpResponseMessage response = await client.GetAsync(uri);
 
-            return await response.Content.ReadAsStringAsync();
+            string weatherResponse = "";
 
+            try
+            {
+                using HttpResponseMessage response = await client.GetAsync(uri);
+                response.EnsureSuccessStatusCode();
+                weatherResponse = await response.Content.ReadAsStringAsync();
+            }
+            catch (Exception ex)
+            {
+                
+                Console.WriteLine($"Error during API call: {ex.Message}");
+            }
+            
+            return weatherResponse;
         }
 
 
