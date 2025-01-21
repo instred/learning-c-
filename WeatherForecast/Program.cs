@@ -1,9 +1,9 @@
 using System;
 using System.Text.Json;
+using WeatherForecast.InteractiveMenu;
 
 namespace WeatherForecast
 {
-
     public class Program
     {
         public async static Task Main(string[] args)
@@ -23,19 +23,20 @@ namespace WeatherForecast
             HttpService client = new();
             string response = await client.GetAsync(api_uri);
 
-            if (JsonSerializer.Deserialize<WeatherResponse>(response) is not WeatherResponse weatherResponse)
-            {
-                Console.WriteLine("Failed to parse weather data");
-                return;
-            }
+            // if (JsonSerializer.Deserialize<WeatherResponse>(response) is not WeatherResponse weatherResponse)
+            // {
+            //     Console.WriteLine("Failed to parse weather data");
+            //     return;
+            // }
 
-            Console.WriteLine(weatherResponse.CityName);
-            foreach(var item in weatherResponse.Data)
-            {
-                Console.WriteLine($"Date: {item.ValidDate}, Temp: {item.Temp}");
+            // Console.WriteLine(weatherResponse.CityName);
+            // foreach(var item in weatherResponse.Data)
+            // {
+            //     Console.WriteLine($"Date: {item.ValidDate}, Temp: {item.Temp}");
 
-            }
+            // }
 
+            UserMenu.ShowMenu();
         }
     }
 }
