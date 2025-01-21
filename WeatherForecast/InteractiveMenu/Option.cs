@@ -3,10 +3,10 @@
 namespace WeatherForecast.InteractiveMenu
 
 {
-    public class Option(string n, Action action_n)
+     public class Option(string name, Func<Task> action)
     {
-        public string Name { get; } = n;
-        public Action Action_name { get; } = action_n;
+        public string Name { get; } = name;
+        public Func<Task> Action_name { get; } = action;
     }
-    
+
 }

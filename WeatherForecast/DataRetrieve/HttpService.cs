@@ -1,5 +1,5 @@
 ﻿
-namespace WeatherForecast
+namespace WeatherForecast.DataRetrieve
 {
     
     public class HttpService

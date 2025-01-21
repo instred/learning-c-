@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace WeatherForecast
+namespace WeatherForecast.Models
 {
 
     public class Data
@@ -13,7 +13,7 @@ namespace WeatherForecast
 
     }
 
-    public class WeatherResponse
+    public class ForecastData
     {
         [JsonPropertyName("data")]
         public required List<Data> Data { get; set; }

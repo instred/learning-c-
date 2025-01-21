@@ -1,25 +1,34 @@
-using System.Collections.Generic;
-using System;
-using System.Linq;
-using System.Threading;
+using WeatherForecast.DataRetrieve;
 
 namespace WeatherForecast.InteractiveMenu
 {
 
     public class UserMenu
     {
+        private static List<Option> options = [];
 
-        public static List<Option> options;
-
-        public static void ShowMenu()
+        public static async Task ShowMenu(string location, string? country, bool hasCountry, string api_key)
         {
+
+            // add option to change city
+            // add other 2 models + functions with api calls
+            // show aditional weather features (ascii icon, chart?)
+            
 
             options =
             [
-                new Option("Show weather forecast for next days", () => WriteMessage("a")),
-                new Option("Show current air quality", () => WriteMessage("b")),
-                new Option("Show any weather alerts around", () => WriteMessage("c")),
-                new Option("Exit", () => Environment.Exit(0)),
+                new Option("Show weather forecast for next days", async () => await Functions.GetForecast(
+                    location, 
+                    country, 
+                    hasCountry, 
+                    api_key,
+                    () => ShowMenu(location, country, hasCountry, api_key))),
+                // new Option("Show current air quality", () => WriteMessage("b")),
+                // new Option("Show any weather alerts around", () => WriteMessage("c")),
+                new Option("Exit", async () => {
+                    Environment.Exit(0);
+                    await Task.CompletedTask;
+                    })
             ];
 
             int idx = 0;
@@ -51,7 +60,7 @@ namespace WeatherForecast.InteractiveMenu
 
                 if (keyInfo.Key == ConsoleKey.Enter)
                 {
-                    options[idx].Action_name.Invoke();
+                    await options[idx].Action_name.Invoke();
                     idx = 0;
                 }
                 
