@@ -10,16 +10,60 @@ namespace WeatherForecast.DataRetrieve
         private static readonly string base_uri = "http://api.weatherbit.io/v2.0/";
         static readonly HttpService client = new();
 
-        public static void GoBack()
+        public async static Task GetCurrentWeather(string location, string? country, bool hasCountry, string api_key, Func<Task> callback)
         {
-            Console.WriteLine("Press Esc to go back");
-            while (Console.ReadKey(intercept: true).Key != ConsoleKey.Escape)
+
+            string currentweather_uri = base_uri + $"current?key={api_key}&city={location}";
+            if (hasCountry)
             {
-                Console.WriteLine("Press Esc to go back");
+                currentweather_uri += $",{country}";
             }
 
-        }
+            Console.Clear();
+            Console.WriteLine(currentweather_uri);
 
+            string response = await client.GetAsync(currentweather_uri);
+
+            if (JsonSerializer.Deserialize<Current>(response) is not Current weatherResponse)
+            {
+                Console.WriteLine("Failed to parse weather data");
+                return;
+            }
+
+
+            ShowCurrentWeather(weatherResponse);
+            GoBack();
+            await callback();
+
+            return;
+            
+        }
+        public async static Task GetAlerts(string location, string? country, bool hasCountry, string api_key, Func<Task> callback)
+        {
+            string alerts_uri = base_uri + $"alerts?key={api_key}&city={location}";
+            if (hasCountry)
+            {
+                alerts_uri += $",{country}";
+            }
+
+            Console.Clear();
+            Console.WriteLine(alerts_uri);
+
+            string response = await client.GetAsync(alerts_uri);
+
+            if (JsonSerializer.Deserialize<CurrentAlerts>(response) is not CurrentAlerts weatherResponse)
+            {
+                Console.WriteLine("Failed to parse weather data");
+                return;
+            }
+
+            ShowAlerts(weatherResponse);
+            GoBack();
+            await callback();
+
+            return;
+            
+        }
         public async static Task GetForecast(string location, string? country, bool hasCountry, string api_key, Func<Task> callback)
         {
             
@@ -40,30 +84,82 @@ namespace WeatherForecast.DataRetrieve
                 return;
             }
 
-            Console.WriteLine(weatherResponse.CityName);
-            foreach(var item in weatherResponse.Data)
-            {
-                Console.WriteLine($"Date: {item.ValidDate}, Temp: {item.Temp}");
-
-            }
-
+            ShowForecastData(weatherResponse);
             GoBack();
             await callback();
 
             return;
         }
-        // public static ForecastData GetAlerts(string location, string? country, string api_key)
-        // {
-        //     string alerts_uri = base_uri + "alerts?key={api_key}&";
-        //     Console.WriteLine(alerts_uri);
-            
-        // }
-        // public static ForecastData GetAirQuality(string location, string? country, string api_key)
-        // {
-        //     string airquality_uri = base_uri + "current/airquality?key={api_key}&";
-        //     Console.WriteLine(airquality_uri);
-            
-        // }
 
+        public static void ShowCurrentWeather(Current currentWeather)
+        {
+            
+            foreach (var data in currentWeather.Data)
+            {
+                Console.Write(data.CityName);
+                if (!string.IsNullOrEmpty(data.CountryCode))
+                {   
+                    Console.Write($" {data.CountryCode}");
+                }
+                Console.WriteLine("\nCurrent weather informations for your location:\n");
+                Console.WriteLine($"Temperature: {data.Temp}C");
+                Console.WriteLine($"Wind speed : {data.WindSpeed}(m/s)");
+                Console.WriteLine($"Pressure: {data.Pressure}hpa");
+                Console.WriteLine($"Snowfall level: {data.Snowfall}mm");
+                Console.WriteLine($"Last observation time: {data.ObservationTime}");
+            
+                // Add icon + info 
+
+            }
+        }
+
+        public static void ShowAlerts(CurrentAlerts nearAlerts)
+        {
+            Console.Write(nearAlerts.CityName);
+            if (!string.IsNullOrEmpty(nearAlerts.CountryName))
+            {   
+                Console.Write($",{nearAlerts.CountryName}");
+            }
+            Console.WriteLine();
+            if (nearAlerts.Alerts == null)
+            {
+                Console.WriteLine("No alerts found for this location");
+                return;
+            }
+            foreach(var data in nearAlerts.Alerts)
+            {
+                Console.WriteLine("\nAlerts found near your location:\n");
+                Console.WriteLine($"Title: {data.Title}");
+                Console.WriteLine($"UTC time that alert was issued: {data.EffectiveUTC}");
+                Console.WriteLine($"Severity of the weather phenomena - Either 'Advisory', 'Watch', or 'Warning': {data.Serverity}");
+                Console.WriteLine($"Affected regions: {data.Regions}");
+                Console.WriteLine($"Alert description: {data.Description}");
+            }
+        }
+        public static void ShowForecastData(Forecast forecast)
+        {
+            Console.Write(forecast.CityName);
+            if (!string.IsNullOrEmpty(forecast.CountryCode))
+            {   
+                Console.Write($",{forecast.CountryCode}");
+            }
+            Console.WriteLine();
+            foreach(var data in forecast.Data)
+            {
+                Console.WriteLine($"Date: {data.ValidDate}, Temp: {data.Temp}");
+
+            }
+
+            // add more displayed info + icon 
+        }
+        public static void GoBack()
+        {
+            Console.WriteLine("\nPress Esc to go back");
+            while (Console.ReadKey(intercept: true).Key != ConsoleKey.Escape)
+            {
+                Console.WriteLine("Press Esc to go back");
+            }
+
+        }
     }
 }

@@ -11,20 +11,29 @@ namespace WeatherForecast.InteractiveMenu
         {
 
             // add option to change city
-            // add other 2 models + functions with api calls
             // show aditional weather features (ascii icon, chart?)
             
 
             options =
             [
+                new Option("Show current weather", async () => await Functions.GetCurrentWeather(
+                    location, 
+                    country, 
+                    hasCountry, 
+                    api_key,
+                    () => ShowMenu(location, country, hasCountry, api_key))),
+                new Option("Show severe weather alerts", async () => await Functions.GetAlerts(
+                    location, 
+                    country, 
+                    hasCountry, 
+                    api_key,
+                    () => ShowMenu(location, country, hasCountry, api_key))),
                 new Option("Show weather forecast for next days", async () => await Functions.GetForecast(
                     location, 
                     country, 
                     hasCountry, 
                     api_key,
                     () => ShowMenu(location, country, hasCountry, api_key))),
-                // new Option("Show current air quality", () => WriteMessage("b")),
-                // new Option("Show any weather alerts around", () => WriteMessage("c")),
                 new Option("Exit", async () => {
                     Environment.Exit(0);
                     await Task.CompletedTask;

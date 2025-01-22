@@ -2,23 +2,10 @@ using System.Text.Json.Serialization;
 
 namespace WeatherForecast.Models
 {
-
-    public class Weather
+    
+    public class CurrentData
     {
-        [JsonPropertyName("icon")]
-        public required string IconCode { get; set;}
 
-        [JsonPropertyName("description")]
-        public required string Description { get; set;}
-
-
-    }
-
-    public class ForecastData
-    {
-        [JsonPropertyName("valid_date")]
-        public string? ValidDate { get; set;}
-        
         [JsonPropertyName("temp")]
         public double Temp { get; set;}
 
@@ -34,22 +21,20 @@ namespace WeatherForecast.Models
         [JsonPropertyName("weather")]
         public Weather? WeatherIconDetails {get; set;}
 
-    }
-
-    public class Forecast
-    {
-        [JsonPropertyName("data")]
-        public required List<ForecastData> Data { get; set; }
+        [JsonPropertyName("ob_time")]
+        public required string ObservationTime { get; set;}
 
         [JsonPropertyName("city_name")]
         public required string CityName { get; set;}
 
         [JsonPropertyName("country_code")]
-        public string? CountryCode {get; set;}
+        public required string CountryCode { get; set;}
 
     }
 
-
-
+    public class Current
+    {
+        [JsonPropertyName("data")]
+        public required List<CurrentData> Data { get; set; }
+    }
 }
-
