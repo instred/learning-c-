@@ -34,7 +34,7 @@ namespace WeatherForecast.DataRetrieve
 
             string response = await client.GetAsync(forecast_uri);
 
-            if (JsonSerializer.Deserialize<ForecastData>(response) is not ForecastData weatherResponse)
+            if (JsonSerializer.Deserialize<Forecast>(response) is not Forecast weatherResponse)
             {
                 Console.WriteLine("Failed to parse weather data");
                 return;
