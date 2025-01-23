@@ -10,9 +10,7 @@ namespace WeatherForecast.InteractiveMenu
         public static async Task ShowMenu(string location, string? country, bool hasCountry, string api_key)
         {
 
-            // add option to change city
             // show aditional weather features (ascii icon, chart?)
-            
 
             options =
             [
@@ -34,6 +32,8 @@ namespace WeatherForecast.InteractiveMenu
                     hasCountry, 
                     api_key,
                     () => ShowMenu(location, country, hasCountry, api_key))),
+                new Option("Change location", async () => await Startup.ProgramStart(
+                    false)),
                 new Option("Exit", async () => {
                     Environment.Exit(0);
                     await Task.CompletedTask;
@@ -57,12 +57,22 @@ namespace WeatherForecast.InteractiveMenu
                         idx ++;
                         WriteMenu(options, options[idx]);
                     }
+                    else
+                    {
+                        idx = 0;
+                        WriteMenu(options, options[idx]);
+                    }
                 }
                 if (keyInfo.Key == ConsoleKey.UpArrow)
                 {
                     if (idx - 1 >= 0)
                     {
                         idx --;
+                        WriteMenu(options, options[idx]);
+                    }
+                    else
+                    {
+                        idx = options.Count-1;
                         WriteMenu(options, options[idx]);
                     }
                 }
@@ -76,23 +86,6 @@ namespace WeatherForecast.InteractiveMenu
             } while (keyInfo.Key != ConsoleKey.X);
 
             Console.ReadKey();
-        }
-
-        
-        public static void WriteMessage(string message)
-        {
-            Console.Clear();
-            Console.WriteLine(message);
-            
-            Console.WriteLine("Press Esc to go back");
-            while (Console.ReadKey(intercept: true).Key != ConsoleKey.Escape)
-            {
-                Console.WriteLine("Press Esc to go back");
-            }
-            // Thread.Sleep(2000);
-            Console.Clear();
-            WriteMenu(options, options.First());
-
         }
 
         public static void WriteMenu (List<Option> options, Option selected)

@@ -7,7 +7,7 @@ namespace WeatherForecast
         
         public static async Task Main(string[] args)
         {
-            await Startup.ProgramStart();
+            await Startup.ProgramStart(true);
         }
     }
 }

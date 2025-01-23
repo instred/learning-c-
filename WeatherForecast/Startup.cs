@@ -7,10 +7,14 @@ namespace WeatherForecast
     {
 
         
-        public static async Task ProgramStart()
+        public static async Task ProgramStart(bool greetUser)
         {
 
-            GreetUser();
+            if (greetUser)
+            {
+                GreetUser();
+            }
+            Console.Clear();
             Tuple<string, string> location_pair = GetInput();
             string location = location_pair.Item1;
             string country = location_pair.Item2;
@@ -40,11 +44,11 @@ namespace WeatherForecast
 
         public static void GreetUser()
         {
+            Console.Clear();
             Console.WriteLine("Welcome to Weather App.\nCurrently supported operations are: Weaher Forecast, Nearest Alerts Check, Check current Air Quality");
             Console.WriteLine("You can give location with city name. Country is optional");
             Console.WriteLine("Press a button to start");
             Console.ReadKey();
-            Console.Clear();
         }
 
         public static Tuple<string,string> GetInput()

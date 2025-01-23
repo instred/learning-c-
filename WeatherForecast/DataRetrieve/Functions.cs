@@ -1,5 +1,6 @@
 using WeatherForecast.Models;
 using System.Text.Json;
+using System.Globalization;
 
 namespace WeatherForecast.DataRetrieve
 {
@@ -20,7 +21,7 @@ namespace WeatherForecast.DataRetrieve
             }
 
             Console.Clear();
-            Console.WriteLine(currentweather_uri);
+            // Console.WriteLine(currentweather_uri);
 
             string response = await client.GetAsync(currentweather_uri);
 
@@ -47,7 +48,7 @@ namespace WeatherForecast.DataRetrieve
             }
 
             Console.Clear();
-            Console.WriteLine(alerts_uri);
+            // Console.WriteLine(alerts_uri);
 
             string response = await client.GetAsync(alerts_uri);
 
@@ -74,7 +75,7 @@ namespace WeatherForecast.DataRetrieve
             }
 
             Console.Clear();
-            Console.WriteLine(forecast_uri);
+            // Console.WriteLine(forecast_uri);
 
             string response = await client.GetAsync(forecast_uri);
 
@@ -93,7 +94,6 @@ namespace WeatherForecast.DataRetrieve
 
         public static void ShowCurrentWeather(Current currentWeather)
         {
-            
             foreach (var data in currentWeather.Data)
             {
                 Console.Write(data.CityName);
@@ -109,7 +109,6 @@ namespace WeatherForecast.DataRetrieve
                 Console.WriteLine($"Last observation time: {data.ObservationTime}");
             
                 // Add icon + info 
-
             }
         }
 
@@ -143,12 +142,22 @@ namespace WeatherForecast.DataRetrieve
             {   
                 Console.Write($",{forecast.CountryCode}");
             }
-            Console.WriteLine();
+            Console.WriteLine("\n");
             foreach(var data in forecast.Data)
-            {
-                Console.WriteLine($"Date: {data.ValidDate}, Temp: {data.Temp}");
+            {   
+                if (data.ValidDate != null)
+                {
+                    GetDayOfWeek(data.ValidDate);
+                }
+                Console.Write($", {data.ValidDate}\n");
+                Console.WriteLine($"Temperature: {data.Temp}C");
+                Console.WriteLine($"Wind speed : {data.WindSpeed}(m/s)");
+                Console.WriteLine($"Pressure: {data.Pressure}hpa");
+                Console.WriteLine($"Snowfall level: {data.Snowfall}mm");
 
+                Console.WriteLine();
             }
+            
 
             // add more displayed info + icon 
         }
@@ -160,6 +169,24 @@ namespace WeatherForecast.DataRetrieve
                 Console.WriteLine("Press Esc to go back");
             }
 
+        }
+
+        public static void GetDayOfWeek(string date)
+        {
+            DateTime dateTime;
+
+            try
+            {
+                dateTime = DateTime.Parse(date, CultureInfo.InvariantCulture);
+                Console.Write(dateTime.ToString("ddd", new CultureInfo("en-EN")));
+            }
+
+            catch (FormatException)
+            {
+                Console.WriteLine("Unable to convert {0} to a date.", date);
+            }
+
+            
         }
     }
 }
