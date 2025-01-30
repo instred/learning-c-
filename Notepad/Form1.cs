@@ -16,33 +16,7 @@ namespace Notepad
         {
             InitializeComponent();
         }
-
-        private void toolStripLabel1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripMenuItem2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStripDropDownButton4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void toolStrip1_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-
-        }
-
-        private void toolStripDropDownButton1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
+        private void NewFile_Click(object sender, EventArgs e)
         {
 
         }
