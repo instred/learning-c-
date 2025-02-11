@@ -5,8 +5,6 @@ namespace Notepad
 {
     partial class Form1
     {
-        private System.ComponentModel.IContainer components = null;
-
 
         private void InitializeComponent()
         {
@@ -17,7 +15,6 @@ namespace Notepad
             this.menuOpenFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSaveFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSaveAs = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuRenameFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuCloseFile = new System.Windows.Forms.ToolStripMenuItem();
             this.menuExitProgram = new System.Windows.Forms.ToolStripMenuItem();
             this.editDropDown = new System.Windows.Forms.ToolStripDropDownButton();
@@ -84,7 +81,6 @@ namespace Notepad
             this.menuOpenFile,
             this.menuSaveFile,
             this.menuSaveAs,
-            this.menuRenameFile,
             this.menuCloseFile,
             this.menuExitProgram});
             this.fileDropDown.Image = ((System.Drawing.Image)(resources.GetObject("fileDropDown.Image")));
@@ -113,18 +109,14 @@ namespace Notepad
             this.menuSaveFile.Name = "menuSaveFile";
             this.menuSaveFile.Size = new System.Drawing.Size(224, 26);
             this.menuSaveFile.Text = "Save";
+            this.menuSaveFile.Click += new System.EventHandler(this.MenuSaveFile_Click);
             // 
             // menuSaveAs
             // 
             this.menuSaveAs.Name = "menuSaveAs";
             this.menuSaveAs.Size = new System.Drawing.Size(224, 26);
             this.menuSaveAs.Text = "Save As...";
-            // 
-            // menuRenameFile
-            // 
-            this.menuRenameFile.Name = "menuRenameFile";
-            this.menuRenameFile.Size = new System.Drawing.Size(224, 26);
-            this.menuRenameFile.Text = "Rename";
+            this.menuSaveAs.Click += new System.EventHandler(this.MenuSaveAs_Click);
             // 
             // menuCloseFile
             // 
@@ -310,6 +302,7 @@ namespace Notepad
             this.buttonSaveFile.Name = "buttonSaveFile";
             this.buttonSaveFile.Size = new System.Drawing.Size(25, 25);
             this.buttonSaveFile.Text = "saveFile";
+            this.buttonSaveFile.Click += new System.EventHandler(this.ButtonSaveFile_Click);
             // 
             // buttonSaveAll
             // 
@@ -320,6 +313,7 @@ namespace Notepad
             this.buttonSaveAll.Name = "buttonSaveAll";
             this.buttonSaveAll.Size = new System.Drawing.Size(25, 25);
             this.buttonSaveAll.Text = "saveAll";
+            this.buttonSaveAll.Click += new System.EventHandler(this.ButtonSaveAll_Click);
             // 
             // buttonCloseFile
             // 
@@ -341,6 +335,7 @@ namespace Notepad
             this.buttonCloseAll.Name = "buttonCloseAll";
             this.buttonCloseAll.Size = new System.Drawing.Size(25, 25);
             this.buttonCloseAll.Text = "closeAll";
+            this.buttonCloseAll.Click += new System.EventHandler(this.ButtonCloseAll_Click);
             // 
             // toolStripSeparator1
             // 
@@ -501,7 +496,6 @@ namespace Notepad
         private System.Windows.Forms.ToolStripMenuItem menuOpenFile;
         private System.Windows.Forms.ToolStripMenuItem menuSaveFile;
         private System.Windows.Forms.ToolStripMenuItem menuSaveAs;
-        private System.Windows.Forms.ToolStripMenuItem menuRenameFile;
         private System.Windows.Forms.ToolStripMenuItem menuCloseFile;
         private System.Windows.Forms.ToolStripMenuItem menuExitProgram;
         private System.Windows.Forms.ToolStripDropDownButton editDropDown;

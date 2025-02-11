@@ -9,5 +9,6 @@ namespace Notepad
         public TabPage TabPage { get; set; }
         public bool IsSaved { get; set; }
         public int UntitledNumber { get; set; }
+        public string FilePath { get; set; }
     }
 }
